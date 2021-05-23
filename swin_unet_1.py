@@ -333,9 +333,9 @@ class PatchExpanding(nn.Layer):
         """
         H, W = self.input_resolution
         B, L, C = x.shape
-        print('self.input_resolution', self.input_resolution)
-        print('self.scale', self.scale)
-        print(L,H,W)
+        # print('self.input_resolution', self.input_resolution)
+        # print('self.scale', self.scale)
+        # print(L,H,W)
         assert L == H * W, "input feature has wrong size"
         assert H % 2 == 0 and W % 2 == 0 and C % 2 == 0, f"x size ({H}*{W},{C}) are not even."
         x = x.reshape([B, H, W, C])
@@ -451,11 +451,11 @@ class BasicUpsampleLayer(nn.Layer):
             self.upsample = None
 
     def forward(self, x):
-        print('self.input_resolution', self.input_resolution)
-        print('beforeswin', x.shape)
+        # print('self.input_resolution', self.input_resolution)
+        # print('beforeswin', x.shape)
         for blk in self.blocks:
             x = blk(x)
-        print('afterswin', x.shape)
+        # print('afterswin', x.shape)
         
         if self.upsample is not None:
             x = self.upsample(x)
@@ -633,25 +633,25 @@ class SwinUnet(nn.Layer):
         if self.ape:
             x = x + self.absolute_pos_embed
         x = self.pos_drop(x)
-        print('x',x.shape)
+        # print('x',x.shape)
         x0 = self.downlayers[0](x)
-        print('x0',x0.shape)
+        # print('x0',x0.shape)
         x1 = self.downlayers[1](x0)
-        print('x1',x1.shape)
+        # print('x1',x1.shape)
         x2 = self.downlayers[2](x1)
-        print('x2',x2.shape)
+        # print('x2',x2.shape)
         x3 = self.uplayers[0](x2)
         x3 = x3+x1
-        print('x3',x3.shape)
+        # print('x3',x3.shape)
         x4 = self.uplayers[1](x3)
         x4 = x4+x0
-        print('x4',x4.shape)
+        # print('x4',x4.shape)
         x5 = self.uplayers[2](x4)
         x5 = x5+x
-        print('x5', x5)
+        # print('x5', x5)
         x6 = self.uplayers[3](x5)
         x6 = self.patch_expanding(x6)
-        print('x6',x6.shape)
+        # print('x6',x6.shape)
         if self.class_dim > 0:
             x = self.head(x6)
         return x
